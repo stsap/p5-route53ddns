@@ -10,8 +10,6 @@ use Data::Dumper;
 
 my $gip = get('http://169.254.169.254/latest/meta-data/public-ipv4');
 
-warn $gip;
-
 GetOptions(
     "id=s"     => \my $id,
     "key=s"    => \my $key,
@@ -31,8 +29,6 @@ my $old_records = $hostedzone->resource_record_sets;
 
 my $domains = scalar @host > 1 ? join'.|', @host : $host[0];
 $domains.= '.';
-
-warn $domains;
 
 for my $old_record (@$old_records) {
 
