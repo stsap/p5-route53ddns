@@ -56,7 +56,7 @@ route53ddns
 
 =head1 DESCRIPTION
 
-A perl script for updating Amazon route53 DNS recored
+A perl script for updating Amazon route53 DNS records
 
 =head1 SYNOPSIS
 
