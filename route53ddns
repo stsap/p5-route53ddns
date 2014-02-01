@@ -30,11 +30,10 @@ my ($hostedzone) = $route53->get_hosted_zones($zone . '.');
 my $old_records = $hostedzone->resource_record_sets;
 
 my $domains = scalar @host > 1 ? join'.|', @host : $host[0];
-$domains.= '.';
+my $regex = sprintf'^(?:%s.)$', $domains;
 
 for my $old_record (@$old_records) {
-
-    if ($old_record->name =~ m/$domains/){
+    if ($old_record->name =~ m/$regex/){
 
         my $record = Net::Amazon::Route53::ResourceRecordSet::Change->new(
             name            => $old_record->name,
