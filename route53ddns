@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use Regexp::Assemble;
 use Net::Amazon::Route53;
 use Net::Amazon::Route53::ResourceRecordSet::Change;
 use Getopt::Long qw(:config posix_default no_ignore_case gnu_compat);
@@ -29,11 +30,12 @@ my $route53 = Net::Amazon::Route53->new(
 my ($hostedzone) = $route53->get_hosted_zones($zone . '.');
 my $old_records = $hostedzone->resource_record_sets;
 
-my $domains = scalar @host > 1 ? join'.|', @host : $host[0];
-my $regex = sprintf'^(?:%s.)$', $domains;
+my $ra = Regexp::Assemble->new;
+$ra->add(sprintf'^\Q%s.\E$', $_) for @host;
 
 for my $old_record (@$old_records) {
-    if ($old_record->name =~ m/$regex/){
+
+    if ( my $hit_regexp = $ra->match( $old_record->name )){
 
         my $record = Net::Amazon::Route53::ResourceRecordSet::Change->new(
             name            => $old_record->name,
@@ -45,6 +47,7 @@ for my $old_record (@$old_records) {
             route53         => $route53,
         );
         $record->change();
+
     }
 }
 
