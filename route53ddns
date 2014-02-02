@@ -35,7 +35,7 @@ $ra->add(sprintf'^\Q%s.\E$', $_) for @host;
 
 for my $old_record (@$old_records) {
 
-    if ( my $hit_regexp = $ra->match( $old_record->name )){
+    if ( $ra->match( $old_record->name )){
 
         my $record = Net::Amazon::Route53::ResourceRecordSet::Change->new(
             name            => $old_record->name,
