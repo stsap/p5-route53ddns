@@ -34,7 +34,7 @@ my $ra = Regexp::Assemble->new;
 $ra->add(sprintf'^\Q%s.\E$', $_) for @host;
 
 for my $old_record (@$old_records) {
-
+    next if ($old_record ne "A");
     if ( $ra->match( $old_record->name )){
 
         my $record = Net::Amazon::Route53::ResourceRecordSet::Change->new(
